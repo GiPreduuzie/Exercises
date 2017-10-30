@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FibonacciConsole", "FibonacciConsole\FibonacciConsole.csproj", "{421AD917-8B88-4543-B07E-4BF2B567C58F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleArbitraryPrecisionArithmetic", "SimpleArbitraryPrecisionArithmetic\SimpleArbitraryPrecisionArithmetic.csproj", "{8CA8F100-B30C-49F8-B4C4-52A26489DC31}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FibonacciApi", "FibonacciApi\FibonacciApi.csproj", "{3B10940D-7FD2-4BFA-BC38-BF22254A4203}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{8B903510-D812-478B-80F6-F0F41368B1A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D0C16800-6561-42CA-A137-FC7455A63693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleArbitraryPrecisionArithmetic.Tests", "SimpleArbitraryPrecisionArithmetic.Tests\SimpleArbitraryPrecisionArithmetic.Tests.csproj", "{3EAC3920-7305-4BDB-945B-8C7429E29202}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{421AD917-8B88-4543-B07E-4BF2B567C58F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{421AD917-8B88-4543-B07E-4BF2B567C58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{421AD917-8B88-4543-B07E-4BF2B567C58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{421AD917-8B88-4543-B07E-4BF2B567C58F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA8F100-B30C-49F8-B4C4-52A26489DC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA8F100-B30C-49F8-B4C4-52A26489DC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA8F100-B30C-49F8-B4C4-52A26489DC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA8F100-B30C-49F8-B4C4-52A26489DC31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B10940D-7FD2-4BFA-BC38-BF22254A4203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B10940D-7FD2-4BFA-BC38-BF22254A4203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B10940D-7FD2-4BFA-BC38-BF22254A4203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B10940D-7FD2-4BFA-BC38-BF22254A4203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B903510-D812-478B-80F6-F0F41368B1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B903510-D812-478B-80F6-F0F41368B1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B903510-D812-478B-80F6-F0F41368B1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B903510-D812-478B-80F6-F0F41368B1A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EAC3920-7305-4BDB-945B-8C7429E29202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EAC3920-7305-4BDB-945B-8C7429E29202}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EAC3920-7305-4BDB-945B-8C7429E29202}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAC3920-7305-4BDB-945B-8C7429E29202}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3EAC3920-7305-4BDB-945B-8C7429E29202} = {D0C16800-6561-42CA-A137-FC7455A63693}
+	EndGlobalSection
+EndGlobal
