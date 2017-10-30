@@ -9,7 +9,7 @@ namespace FibonacciConsole
         {
             return new Configs
             {
-                RabbitMQHost = "rabbitmq://localhost",
+                RabbitMQHost = "localhost",
                 Username = "guest",
                 Password = "guest",
                 QueueNamePattern = "my_command_{0}"

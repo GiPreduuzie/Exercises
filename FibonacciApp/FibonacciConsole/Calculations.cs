@@ -1,8 +1,11 @@
 ﻿using Contracts;
 using MassTransit;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using SimpleArbitraryPrecisionArithmetic;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace FibonacciConsole
 {
@@ -23,7 +26,7 @@ namespace FibonacciConsole
             bus.Stop();
         }
 
-        public IBusControl StartCalculations(int queueAmount)
+        public void StartCalculations(int queueAmount)
         {
             var initializers =
             Enumerable
@@ -38,42 +41,49 @@ namespace FibonacciConsole
                 .Select(x => new Calculator(_fibbonacciRestClient, x.QueueNumber, MyLong.FromInt(1)))
                 .ToArray();
 
-            var bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
+
+            foreach (var calculator in calculators)
             {
-                sbc.AutoDelete = true;
-                sbc.PurgeOnStartup = true;
-
-                var host = sbc.Host(new Uri(_configs.RabbitMQHost), h =>
-                {
-                    h.Username(_configs.Username);
-                    h.Password(_configs.Password);
-                });
-
-                foreach (var calculator in calculators)
-                {
-                    sbc.ReceiveEndpoint(
-                        host,
-                        _configs.GetQueueName(calculator.QueueNumber),
-                        ep =>
+                Subscribe(
+                    _configs.GetQueueName(calculator.QueueNumber),
+                    x =>
                     {
-                        ep.Handler<NextNumberMessage>(context =>
-                        {
-                            return Console
-                            .Out
-                            .WriteLineAsync($"from queue: {calculator.QueueNumber} " + context.Message.Value)
-                            .ContinueWith(task => calculator.Next(MyLong.FromString(context.Message.Value)));
-                        });
+                        Console.WriteLine($"from queue: {calculator.QueueNumber} " + x);
+                        calculator.Next(MyLong.FromString(x));
                     });
-                }
-            });
+            }
 
             foreach (var calculator in calculators)
             {
                 calculator.Next(MyLong.FromInt(1));
             }
+        }
 
-            bus.Start();
-            return bus;
+        private void Subscribe(string queueName, Action<string> handler)
+        {
+            var factory = new ConnectionFactory() { HostName = _configs.RabbitMQHost };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queueName,
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += (model, ea) =>
+                {
+                    var body = ea.Body;
+                    var message = Encoding.UTF8.GetString(body);
+                    handler(message);
+                };
+
+                channel.BasicConsume(queue: queueName,
+                                     autoAck: true,
+                                     consumer: consumer);
+
+            }
         }
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using MassTransit;
 using SimpleArbitraryPrecisionArithmetic;
 using Contracts;
+using System.Text;
+using RabbitMQ.Client;
+using FibonacciApi;
 
 namespace WebApplication1.Controllers
 {
@@ -12,27 +14,15 @@ namespace WebApplication1.Controllers
     public class ValuesController : Controller
     {
         private static IDictionary<int, MyLong> _values;
-        private static IBusControl _bus;
         private static Configs _configs;
 
         [HttpPost("init")]
         public void Init([FromBody] InitParameters initParameters)
         {
-                _configs = initParameters.Configs;
-                _values = initParameters
-                    .CalculationInits
-                    .ToDictionary(x => x.QueueNumber, x => MyLong.FromString(x.Value));
-
-                _bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
-                {
-                    var host = sbc.Host(new Uri(_configs.RabbitMQHost), h =>
-                    {
-                        h.Username(_configs.Username);
-                        h.Password(_configs.Password);
-                    });
-                });
-
-                _bus.Start();
+            _configs = initParameters.Configs;
+            _values = initParameters
+                .CalculationInits
+                .ToDictionary(x => x.QueueNumber, x => MyLong.FromString(x.Value));
         }
 
         [HttpGet]
@@ -41,22 +31,13 @@ namespace WebApplication1.Controllers
             return _values == null ? "< nothing >" : string.Join("; ", _values.Select(x => $"[{x.Key} : {x.Value}]"));
         }
 
-        [HttpPost("stop")]
-        public void Stop()
-        {
-            _bus?.StopAsync();
-        }
-
         [HttpPost]
-        public async void Post(int n, string value)
+        public void Post(int n, string value)
         {
             System.IO.File.AppendAllText($"C:\\Temp\\log_{n}.log", $"{n}:{value}" + Environment.NewLine);
 
-            var result = _values[n] + MyLong.FromString(value);
-            _values[n] = result;
-
-            var endpoint = await _bus.GetSendEndpoint(new Uri(_configs.GetQueueName(n)));
-            await endpoint.Send(new NextNumberMessage() { Value = result.ToString() });
+            var message = MyLong.FromString(value) + _values[n];
+            new MessageSender(_configs).SendMessage(message.ToString(), _configs.GetQueueName(n));
         }
     }
 }

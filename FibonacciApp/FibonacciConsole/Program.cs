@@ -1,5 +1,4 @@
-﻿using Contracts;
-using RestSharp;
+﻿using RestSharp;
 using SimpleArbitraryPrecisionArithmetic;
 using System;
 using System.Collections.Generic;
@@ -34,13 +33,11 @@ namespace FibonacciConsole
             var calculations = new Calculations(
                 new FibbonacciRestClient(configs, client),
                 configs);
-            var bus = calculations.StartCalculations(queueAmount);
+            calculations.StartCalculations(queueAmount);
 
             Console.WriteLine("Started. Press any key to exit");
             Console.ReadKey();
-
             Console.WriteLine("Stopping...");
-            calculations.StopCalculations(bus);
         }
     }
 }
